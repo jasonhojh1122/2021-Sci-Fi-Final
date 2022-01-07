@@ -1,42 +1,80 @@
 import processing.core.PImage;
 
-import java.awt.event.KeyEvent;
-
 public class StartScene implements Scene {
 
+    boolean ended;
     PImage logo;
-    boolean isEnd;
-    boolean hasUpdated;
+    int logoSize = 60;
+    int logoStartX;
+    int logoStartY;
+    int logoCurShift;
+    int logoMaxShift = 5;
+    boolean movingDown;
+
+    String hintText = "Press enter to start.";
+    int hintStartX;
+    int hintStartY;
 
     public StartScene() {
         logo = App.proc.loadImage("Logo.png");
-        isEnd = false;
+        ended = false;
     }
 
     @Override
     public void init() {
         int size = 60;
-        int startX = App.screen.width / 2 - size / 2;
-        int startY = App.screen.height / 2 - size / 2 - 10;
-        App.screen.drawImage(logo, size, size, startX, startY);
-        String text = "Press enter to start.";
-        App.screen.drawText(text, App.screen.width / 2 - text.length() / 2,
-                            App.screen.height / 2 + size / 2+ 5, App.proc.color(255));
+        logoStartX = App.screen.width / 2 - size / 2;
+        logoStartY = App.screen.height / 2 - size / 2 - 10;
+        logoCurShift = 0;
+        movingDown = true;
+        hintStartX = App.screen.width / 2 - hintText.length() / 2;
+        hintStartY = App.screen.height / 2 + logoSize / 2 + 5;
     }
 
     @Override
     public void update() {
+        if (App.proc.frameCount % 20 != 0) return;
+        if (App.proc.frameCount % 40 == 0)
+            App.screen.clear();
+        shiftLogo();
+        drawLogo(logoStartY + logoCurShift);
+        drawHint();
     }
 
     @Override
     public void keyPressed() {
-        if (App.proc.keyCode == KeyEvent.VK_ENTER) {
-            isEnd = true;
+        if (App.proc.key == '\n') {
+            ended = true;
         }
     }
 
     @Override
     public boolean isEnd() {
-        return isEnd;
+        return ended;
+    }
+
+    private void shiftLogo() {
+        if (movingDown) {
+            logoCurShift--;
+            if (logoCurShift < -logoMaxShift) {
+                logoCurShift++;
+                movingDown = false;
+            }
+        }
+        else {
+            logoCurShift++;
+            if (logoCurShift > logoMaxShift) {
+                logoCurShift--;
+                movingDown = true;
+            }
+        }
+    }
+
+    private void drawLogo(int y) {
+        App.screen.drawImage(logo, logoSize, logoSize, logoStartX, y);
+    }
+
+    private void drawHint() {
+        App.screen.drawString(hintText, hintStartX, hintStartY, App.colorPalette.white);
     }
 }

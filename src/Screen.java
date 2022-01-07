@@ -5,11 +5,8 @@ public class Screen {
 
     public int width = 192;
     public int height = 108;
-    public char[][] screen;
-    public int[][] colors;
-    public boolean dirty;
 
-    public final PFont font;
+    public PFont font;
     public int fontSize = 16;
 
     float fontOffsetX = 10;
@@ -20,58 +17,54 @@ public class Screen {
 
 
     public Screen(String fontName) {
+        initFont(fontName);
+        initAsciiTable();
+        clear();
+    }
+
+    private void initFont(String fontName) {
         font = App.proc.createFont(fontName, fontSize);
         App.proc.textFont(font);
         App.proc.textAlign(App.proc.LEFT, App.proc.TOP);
-        dirty = true;
-        screen = new char[width][height];
-        colors = new int[width][height];
+    }
+
+    private void initAsciiTable() {
         asciiTable = new char[256];
         for (int i = 0; i < 256; i++) {
             asciiTable[i] = asciiChars.charAt((int)((double)i / 256d * (double)asciiChars.length()));
         }
-        System.out.println(asciiTable);
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                screen[x][y] = asciiTable[0];
-                colors[x][y] = App.proc.color(0, 0, 0);
-            }
-        }
     }
 
-    public void drawImage(PImage image, int width, int height, int startX, int startY) {
+    public void drawImage(PImage image, int drawWidth, int drawHeight, int startX, int startY) {
         image.loadPixels();
-        int escapeX = image.width / width;
-        int escapeY = image.height / height;
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
+        int escapeX = image.width / drawWidth;
+        int escapeY = image.height / drawHeight;
+        for (int x = 0; x < drawWidth && x + startX < width; x++) {
+            for (int y = 0; y < drawHeight && y + startY < height; y++) {
                 int color = image.pixels[y * escapeY * image.width + x*escapeX];
-                screen[x+startX][y+startY] = asciiTable[(int)App.proc.brightness(color)];
-                colors[x+startX][y+startY] = color;
+                char c = asciiTable[(int)App.proc.brightness(color)];
+                drawChar(c, x+startX, y+startY, color);
             }
         }
-        dirty = true;
     }
 
-    public void drawText(@NotNull String str, int startX, int startY, int color) {
-        for (int x = 0; x < str.length(); x++) {
-            screen[x+startX][startY] = str.charAt(x);
-            colors[x+startX][startY] = color;
+    public void drawString(@NotNull String str, int startX, int startY, int color) {
+        for (int x = 0; x < str.length() && x + startX < width; x++) {
+            drawChar(str.charAt(x), x+startX, startY, color);
         }
-        dirty = true;
     }
 
-    public void refresh() {
-        for (int x = 0; x < screen.length; x++) {
-            for (int y = 0; y < screen[0].length; y++) {
-                App.proc.fill(colors[x][y]);
-                App.proc.text(screen[x][y], fontOffsetX*x, fontOffsetY*y);
-            }
-        }
-        dirty = false;
+    public void setChar(char c, int x, int y, int color) {
+        drawChar(c, x, y, color);
     }
 
-    public boolean isDirty() {
-        return dirty;
+    private void drawChar(char c, int x, int y, int color) {
+        App.proc.fill(color);
+        App.proc.text(c, fontOffsetX*x, fontOffsetY*y);
     }
+
+    public void clear() {
+        App.proc.background(0);
+    }
+
 }
