@@ -4,7 +4,8 @@ public class StartScene implements Scene {
 
     boolean ended;
     PImage logo;
-    int logoSize = 60;
+    int logoSizeX = 60;
+    int logoSizeY = 60;
     int logoStartX;
     int logoStartY;
     int logoCurShift;
@@ -22,13 +23,12 @@ public class StartScene implements Scene {
 
     @Override
     public void init() {
-        int size = 60;
-        logoStartX = App.screen.width / 2 - size / 2;
-        logoStartY = App.screen.height / 2 - size / 2 - 10;
+        logoStartX = App.screen.width / 2 - logoSizeX / 2;
+        logoStartY = App.screen.height / 2 - logoSizeY / 2 - 10;
         logoCurShift = 0;
         movingDown = true;
         hintStartX = App.screen.width / 2 - hintText.length() / 2;
-        hintStartY = App.screen.height / 2 + logoSize / 2 + 5;
+        hintStartY = App.screen.height / 2 + logoSizeY / 2 + 5;
     }
 
     @Override
@@ -71,7 +71,7 @@ public class StartScene implements Scene {
     }
 
     private void drawLogo(int y) {
-        App.screen.drawImage(logo, logoSize, logoSize, logoStartX, y);
+        App.screen.drawImage(logo, logoSizeX, logoSizeY, logoStartX, y);
     }
 
     private void drawHint() {

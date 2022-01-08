@@ -5,11 +5,6 @@ import java.util.ArrayDeque;
 import java.util.Objects;
 import java.util.Queue;
 
-enum State {
-    LOGIN,
-
-}
-
 public class App extends PApplet {
 
     public static PApplet proc;
@@ -44,6 +39,7 @@ public class App extends PApplet {
         screen = new Screen("3270-Regular.ttf");
         scenes = new ArrayDeque<>();
         scenes.add(new StartScene());
+        scenes.add(new VirtualSpace());
         scenes.add(new HackingScene());
         curScene = scenes.peek();
         Objects.requireNonNull(curScene).init();
