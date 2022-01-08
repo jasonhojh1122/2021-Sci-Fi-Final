@@ -22,6 +22,7 @@ public class VirtualSpace implements Scene {
         System.out.println(movie.width + "X" + movie.height);
         frame = 0;
         movieUpdated = false;
+        Nerve.init();
     }
 
     @Override
@@ -30,6 +31,7 @@ public class VirtualSpace implements Scene {
         if (movieUpdated) {
             frame += 1;
             Htop.update(movie, frame);
+            Nerve.update(movie, frame);
             updateWireframe();
             movieUpdated = false;
         }
@@ -142,6 +144,158 @@ public class VirtualSpace implements Scene {
                     App.screen.setChar('#', x, y, App.colorPalette.red);
             }
             App.screen.drawString(String.format("%1$3s", (int)(storage[id]*100f))+"%", 187, y, App.colorPalette.lightGreen);
+        }
+    }
+
+    static class Nerve {
+        static int startX = 145;
+        static int startY = 19;
+        static int width = 47;
+        static int height = 87;
+        static char[][] nerves = new char[width][height];
+
+        static float branchProb;
+
+        static int[] lastPos = new int[8];
+        static int latestRow;
+
+        public static void init() {
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    nerves[x][y] = ' ';
+                }
+            }
+            latestRow = 0;
+            branchProb = 0.15f;
+            for (int i = 0; i < 8; i++) {
+                nerves[2+i*6][latestRow] = '|';
+                lastPos[i] = 2+i*6;
+            }
+        }
+
+        public static void update(Movie movie, int frame) {
+            branchProb = movie.time() / movie.duration() * App.r(0.2f, 0.4f);
+            int newRow = (latestRow + 1) % height;
+            for (int x = 0; x < width; x++) {
+                nerves[x][newRow] = ' ';
+            }
+            for (int i = 0; i < 8; i++) {
+                generate(latestRow, i);
+            }
+            latestRow = newRow;
+            draw();
+        }
+
+        static void generate(int curRow, int nerveID) {
+            float p = App.r01();
+            char lastC = nerves[lastPos[nerveID]][curRow];
+            int writeRow = (curRow + 1) % height;
+            if (p < branchProb) {
+                updateNewRight(lastC, nerveID, writeRow);
+            }
+            else if (p < branchProb * 2) {
+                updateNewLeft(lastC, nerveID, writeRow);
+            }
+            else {
+                updateNewStraight(nerveID, writeRow);
+            }
+        }
+
+        static void updateNewRight(char lastC, int nerveID, int writeRow) {
+            switch (lastC) {
+                case '\\':
+                    if (lastPos[nerveID] == 0) {
+                        if (nerves[lastPos[nerveID]][writeRow] != ' ')
+                            nerves[lastPos[nerveID]][writeRow] = '*';
+                        else
+                            nerves[lastPos[nerveID]][writeRow] = '|';
+                    }
+                    else {
+                        lastPos[nerveID] -= 1;
+                        if (nerves[lastPos[nerveID]][writeRow] != ' ')
+                            nerves[lastPos[nerveID]][writeRow] = '*';
+                        else
+                            nerves[lastPos[nerveID]][writeRow] = '\\';
+                    }
+                    break;
+                case '|':
+                    if (nerves[lastPos[nerveID]][writeRow] != ' ')
+                        nerves[lastPos[nerveID]][writeRow] = '*';
+                    else {
+                        if (lastPos[nerveID] == 0)
+                            nerves[lastPos[nerveID]][writeRow] = '|';
+                        else {
+                            lastPos[nerveID] -= 1;
+                            nerves[lastPos[nerveID]][writeRow] = '\\';
+                        }
+                    }
+                    break;
+                case '/':
+                    if (nerves[lastPos[nerveID]][writeRow] != ' ')
+                        nerves[lastPos[nerveID]][writeRow] = '*';
+                    else
+                        nerves[lastPos[nerveID]][writeRow] = '|';
+                    break;
+            }
+        }
+
+        static void updateNewLeft(char lastC, int nerveID, int writeRow) {
+            switch (lastC) {
+                case '/':
+                    if (lastPos[nerveID] == width - 1) {
+                        if (nerves[lastPos[nerveID]][writeRow] != ' ')
+                            nerves[lastPos[nerveID]][writeRow] = '*';
+                        else
+                            nerves[lastPos[nerveID]][writeRow] = '|';
+                    } else {
+                        lastPos[nerveID] += 1;
+                        if (nerves[lastPos[nerveID]][writeRow] != ' ')
+                            nerves[lastPos[nerveID]][writeRow] = '*';
+                        else
+                            nerves[lastPos[nerveID]][writeRow] = '/';
+                    }
+                    break;
+                case '|':
+                    if (nerves[lastPos[nerveID]][writeRow] != ' ')
+                        nerves[lastPos[nerveID]][writeRow] = '*';
+                    else {
+                        if (lastPos[nerveID] == width - 1)
+                            nerves[lastPos[nerveID]][writeRow] = '|';
+                        else {
+                            lastPos[nerveID] += 1;
+                            nerves[lastPos[nerveID]][writeRow] = '/';
+                        }
+                    }
+                    break;
+                case '\\':
+                    if (nerves[lastPos[nerveID]][writeRow] != ' ')
+                        nerves[lastPos[nerveID]][writeRow] = '*';
+                    else
+                        nerves[lastPos[nerveID]][writeRow] = '|';
+                    break;
+            }
+        }
+
+        static void updateNewStraight(int nerveID, int writeRow) {
+            if (nerves[lastPos[nerveID]][writeRow] != ' ')
+                nerves[lastPos[nerveID]][writeRow] = '*';
+            else
+                nerves[lastPos[nerveID]][writeRow] = '|';
+        }
+
+        static void draw() {
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    int indexY = (latestRow - y + height) % height;
+                    char c = nerves[x][indexY];
+                    if (c == '*')
+                        App.screen.setChar(c, startX+x, startY+y, App.colorPalette.red);
+                    else if (c == '|')
+                        App.screen.setChar(c, startX+x, startY+y, App.colorPalette.lightGreen);
+                    else
+                        App.screen.setChar(c, startX+x, startY+y, App.colorPalette.blue);
+                }
+            }
         }
     }
 }
