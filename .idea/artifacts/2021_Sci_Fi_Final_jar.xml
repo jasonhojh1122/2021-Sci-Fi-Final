@@ -1,0 +1,16 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="2021-Sci-Fi-Final:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/2021_Sci_Fi_Final_jar</output-path>
+    <root id="archive" name="2021-Sci-Fi-Final.jar">
+      <element id="module-output" name="2021-Sci-Fi-Final" />
+      <element id="extracted-dir" path="C:/Program Files/Processing/processing-4.0b2/core/library/core.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Documents/Processing/libraries/video/library/video.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Documents/Processing/libraries/video/library/gst1-java-core-1.2.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Documents/Processing/libraries/video/library/jna.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jetbrains/annotations/20.1.0/annotations-20.1.0.jar" path-in-jar="/" />
+      <element id="directory" name="data">
+        <element id="dir-copy" path="$PROJECT_DIR$/data" />
+      </element>
+    </root>
+  </artifact>
+</component>

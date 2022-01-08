@@ -48,6 +48,19 @@ public class Screen {
         }
     }
 
+    public void drawImage(PImage image, int drawWidth, int drawHeight, int startX, int startY, int color) {
+        image.loadPixels();
+        int escapeX = image.width / drawWidth;
+        int escapeY = image.height / drawHeight;
+        for (int x = 0; x < drawWidth && x + startX < width; x++) {
+            for (int y = 0; y < drawHeight && y + startY < height; y++) {
+                int pc = image.pixels[y * escapeY * image.width + x*escapeX];
+                char c = asciiTable[(int)App.proc.brightness(pc)];
+                drawChar(c, x+startX, y+startY, color);
+            }
+        }
+    }
+
     public void drawString(@NotNull String str, int startX, int startY, int color) {
         for (int x = 0; x < str.length() && x + startX < width; x++) {
             drawChar(str.charAt(x), x+startX, startY, color);

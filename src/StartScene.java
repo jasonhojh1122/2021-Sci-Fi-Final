@@ -18,17 +18,18 @@ public class StartScene implements Scene {
 
     public StartScene() {
         logo = App.proc.loadImage("Logo.png");
+        logoStartX = App.screen.width / 2 - logoSizeX / 2;
+        logoStartY = App.screen.height / 2 - logoSizeY / 2 - 10;
+        hintStartX = App.screen.width / 2 - hintText.length() / 2;
+        hintStartY = App.screen.height / 2 + logoSizeY / 2 + 5;
         ended = false;
     }
 
     @Override
     public void init() {
-        logoStartX = App.screen.width / 2 - logoSizeX / 2;
-        logoStartY = App.screen.height / 2 - logoSizeY / 2 - 10;
+        ended = false;
         logoCurShift = 0;
         movingDown = true;
-        hintStartX = App.screen.width / 2 - hintText.length() / 2;
-        hintStartY = App.screen.height / 2 + logoSizeY / 2 + 5;
     }
 
     @Override
@@ -51,6 +52,11 @@ public class StartScene implements Scene {
     @Override
     public boolean isEnd() {
         return ended;
+    }
+
+    @Override
+    public void end() {
+        ended = false;
     }
 
     private void shiftLogo() {

@@ -1,0 +1,48 @@
+*** Panic Report ***
+panic(cpu 0 caller 0xffffff805ed88cfd): Kernel trap at 0xffffffff3209c6d0, type 14=page fault, registers:
+CR0: 0x000000008001003b, CR2: 0xffffff803209c6d0, CR3: 0x0000000207706000, CR4: 0x00000000000026e0
+RAX: 0x0000000000000000, RBX: 0x0000000000000006, RCX: 0xffffff80333ed420, RDX: 0xffffff803357c8b8
+RSP: 0xffffff912bab3ed0, RBP: 0x0000000000000005, RSI: 0xffffff803353487e, RDI: 0xffffff803357c8b8
+R8:  0xffffff80316c4000, R9:  0x0000000000000003, R10: 0xffffff8033516340, R11: 0x0000000000000018
+R12: 0xffffff80333ed420, R13: 0x00007fff6dc47eb8, R14: 0xffffff912bab3e50, R15: 0xffffff80333ed3e0
+RFL: 0x0000000000010282, RIP: 0xffffff803209c6d0, CS:  0x0000000000000008, SS:  0x0000000000000010
+Fault CR2: 0xffffff803209c6d0, Error code: 0x0000000000000011, Fault CPU: 0x0 Kernel NX fault, PL: 0, VF: 2
+
+Backtrace (CPU 0), Frame : Return Address
+0xffffff912bab3980 : 0xffffff801ec6e166 
+0xffffff912bab39d0 : 0xffffff801ed96714 
+0xffffff912bab3a10 : 0xffffff801ed88a00 
+0xffffff912bab3a90 : 0xffffff801ec20180 
+0xffffff912bab3ab0 : 0xffffff801ec6dbdc 
+0xffffff912bab3be0 : 0xffffff801ec6d99c 
+0xffffff912bab3c40 : 0xffffff801ed88c2d 
+0xffffff912bab3dc0 : 0xffffff801ec20180 
+0xffffff912bab3de0 : 0xffffff803209c6d0 
+Unaligned frame
+Backtrace terminated-invalid frame pointer 0x5
+
+BSD process name corresponding to current thread: coreduetd
+
+Kernel version:
+Nerve Kernel Version Alpha-0.8.2: Mon Jan 10 2052; root:xnu-3792.51.2~3/PRERELEASE_X86_64
+Kernel UUID: 9f874a4e-425b-4f8f-9fef-6bb85bcc90c0
+Kernel slide:     0x0000000026e00000
+Kernel text base: 0xffffff8026000000
+__HIB  text base: 0xffffff8025f00000
+System model name:nAlpha (Nerve- FGS7Z2CAKU)
+
+System uptime in nanoseconds: 5472195360873
+last loaded kext at 3372433622840: gov.nerve.driver.nAlpha 3 (addr 0xffffff7fa8b34000, size 32768)
+last unloaded kext at 3435680286730: gov.nerve.driver.nAlpha 3 (addr 0xffffff7fa8b34000, size 32768)
+
+panic(cpu 4 caller 0xffffff80261e04fd): CPU(s) failed to respond to interrupts, unresponsive CPU bitmap: 0x1, now: 0x1"@/gov.nerve.xbs/Sources/xnu/x86_64/virtualspace.c:2724
+Backtrace (CPU 4), Frame : Return Address
+0xffffff83bbea3ac0 : 0xffffff80260ec3ec 
+0xffffff83bbea3b40 : 0xffffff80261e04fd 
+0xffffff83bbea3be0 : 0xffffff80261e7802 
+0xffffff83bbea3d00 : 0xffffff80261e883a 
+0xffffff83bbea3d70 : 0xffffff80261750a8 
+0xffffff83bbea3eb0 : 0xffffff80261749ac 
+0xffffff83bbea3ee0 : 0xffffff80260e0f36 
+0xffffff83bbea3f10 : 0xffffff80261ed0d8 
+0xffffff83bbea3fb0 : 0xffffff802609dd66 

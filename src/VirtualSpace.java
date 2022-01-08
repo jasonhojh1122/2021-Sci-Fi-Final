@@ -31,7 +31,7 @@ public class VirtualSpace implements Scene {
         if (movieUpdated) {
             frame += 1;
             Htop.update(movie, frame);
-            Nerve.update(movie, frame);
+            Nerve.update(movie);
             updateWireframe();
             movieUpdated = false;
         }
@@ -44,6 +44,11 @@ public class VirtualSpace implements Scene {
     @Override
     public boolean isEnd() {
         return ended;
+    }
+
+    @Override
+    public void end() {
+        ended = false;
     }
 
     private void updateMovie() {
@@ -82,7 +87,7 @@ public class VirtualSpace implements Scene {
             updateMEM(movie, frame, 5, 9);
             updateSWP(movie, frame, 6, 11);
             updateTasks(movie, frame, 7, 13);
-            updateUpTime(movie, frame, 8, 15);
+            updateUpTime(movie, 15);
         }
 
         public static void updateCPU(Movie movie, int frame, int id, int y) {
@@ -123,7 +128,7 @@ public class VirtualSpace implements Scene {
             App.screen.drawString(String.format("%1$3s", (int)storage[id+1]), 167, y, App.colorPalette.blue);
         }
 
-        public static void updateUpTime(Movie movie, int frame, int id, int y) {
+        public static void updateUpTime(Movie movie, int y) {
             int millis = (int)(movie.time()*1000) + startTime;
             String hms = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millis),
                     TimeUnit.MILLISECONDS.toMinutes(millis) % TimeUnit.HOURS.toMinutes(1),
@@ -173,7 +178,7 @@ public class VirtualSpace implements Scene {
             }
         }
 
-        public static void update(Movie movie, int frame) {
+        public static void update(Movie movie) {
             branchProb = movie.time() / movie.duration() * App.r(0.2f, 0.4f);
             int newRow = (latestRow + 1) % height;
             for (int x = 0; x < width; x++) {

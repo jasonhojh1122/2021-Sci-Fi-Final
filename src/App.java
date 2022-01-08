@@ -1,6 +1,6 @@
 import processing.core.PApplet;
-import processing.core.PFont;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayDeque;
 import java.util.Objects;
 import java.util.Queue;
@@ -39,8 +39,15 @@ public class App extends PApplet {
         screen = new Screen("3270-Regular.ttf");
         scenes = new ArrayDeque<>();
         scenes.add(new StartScene());
-        scenes.add(new VirtualSpace());
         scenes.add(new HackingScene());
+        scenes.add(new VirtualSpace());
+        scenes.add(new ErrorScene());
+        scenes.add(new FaceScene());
+        try {
+            scenes.add(new EndScene());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         curScene = scenes.peek();
         Objects.requireNonNull(curScene).init();
     }
@@ -48,9 +55,11 @@ public class App extends PApplet {
     @Override
     public void draw() {
         if (keyPressed) {
+            System.out.println("PRESSED");
             curScene.keyPressed();
         }
         if (curScene.isEnd()) {
+            curScene.end();
             scenes.remove();
             scenes.add(curScene);
             curScene = scenes.peek();

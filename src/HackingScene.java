@@ -51,14 +51,22 @@ public class HackingScene implements Scene{
     public void keyPressed() {
         if (App.proc.frameCount % 10 < 2 && App.proc.key == '\n') {
             randomProb = Math.min(randomProb + 0.005f, 0.9f);
-            clearProb = Math.max(clearProb - 0.005f, 0.01f);
+            clearProb = Math.max(clearProb - 0.005f, 0.005f);
             minRandom = Math.min(minRandom + 0.01f, 7.0f);
+            if (Math.abs(clearProb - 0.005) < 0.001) {
+                ended = true;
+            }
         }
     }
 
     @Override
     public boolean isEnd() {
         return ended;
+    }
+
+    @Override
+    public void end() {
+        ended = false;
     }
 
     private void initRandomNumbers() {
