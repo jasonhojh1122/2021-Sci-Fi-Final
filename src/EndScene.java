@@ -1,21 +1,11 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+public class EndScene implements Scene {
 
-public class EndScene implements Scene{
-
-    List<String> msg;
     boolean ended;
 
-    public EndScene() throws FileNotFoundException {
-        msg = new ArrayList<>();
-        Scanner scanner = new Scanner(new File("data/error.txt"));
-        while (scanner.hasNextLine()) {
-            msg.add(scanner.nextLine());
-        }
-        scanner.close();
+    String[] msg;
+
+    public EndScene() {
+        msg = App.proc.loadStrings("error.txt");
     }
 
     @Override

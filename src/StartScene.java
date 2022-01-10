@@ -4,8 +4,8 @@ public class StartScene implements Scene {
 
     boolean ended;
     PImage logo;
-    int logoSizeX = 60;
-    int logoSizeY = 60;
+    int logoSizeX = 70;
+    int logoSizeY = 70;
     int logoStartX;
     int logoStartY;
     int logoCurShift;

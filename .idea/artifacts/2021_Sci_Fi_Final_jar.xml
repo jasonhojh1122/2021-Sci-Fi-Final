@@ -11,6 +11,9 @@
       <element id="directory" name="data">
         <element id="dir-copy" path="$PROJECT_DIR$/data" />
       </element>
+      <element id="file-copy" path="$MAVEN_REPOSITORY$/org/jetbrains/annotations/20.1.0/annotations-20.1.0.jar" />
+      <element id="library" level="project" name="core" />
+      <element id="dir-copy" path="$USER_HOME$/Documents/Processing/libraries/video/library/windows64" />
     </root>
   </artifact>
 </component>

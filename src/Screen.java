@@ -37,8 +37,8 @@ public class Screen {
 
     public void drawImage(PImage image, int drawWidth, int drawHeight, int startX, int startY) {
         image.loadPixels();
-        int escapeX = image.width / drawWidth;
-        int escapeY = image.height / drawHeight;
+        int escapeX = image.width / (drawWidth-1);
+        int escapeY = image.height / (drawHeight-1);
         for (int x = 0; x < drawWidth && x + startX < width; x++) {
             for (int y = 0; y < drawHeight && y + startY < height; y++) {
                 int color = image.pixels[y * escapeY * image.width + x*escapeX];

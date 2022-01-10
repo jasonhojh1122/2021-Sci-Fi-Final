@@ -9,7 +9,7 @@ public class HackingScene implements Scene{
     int iceStartY;
     int iceEndY;
 
-    String hint = " Hold ENTER to hack.";
+    String hint = " Hold ENTER to synchronize.";
     int hintStartX;
     int hintY;
     int hintEndX;

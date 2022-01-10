@@ -43,11 +43,7 @@ public class App extends PApplet {
         scenes.add(new VirtualSpace());
         scenes.add(new ErrorScene());
         scenes.add(new FaceScene());
-        try {
-            scenes.add(new EndScene());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        scenes.add(new EndScene());
         curScene = scenes.peek();
         Objects.requireNonNull(curScene).init();
     }
@@ -55,7 +51,6 @@ public class App extends PApplet {
     @Override
     public void draw() {
         if (keyPressed) {
-            System.out.println("PRESSED");
             curScene.keyPressed();
         }
         if (curScene.isEnd()) {
